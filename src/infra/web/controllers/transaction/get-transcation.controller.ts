@@ -11,6 +11,8 @@ interface Request {
     to?: string;
     orderId?: OrderDirection;
     searchText?: string;
+    categoryId?: number;
+    typeId?: number;
   };
 }
 
@@ -22,7 +24,8 @@ export class GetTransactionController {
   }
 
   execute = async (request: FastifyRequest<Request>, reply: FastifyReply) => {
-    const { from, orderId, page, perPage, to, searchText } = request.query;
+    const { from, orderId, page, perPage, to, searchText, categoryId, typeId } =
+      request.query;
 
     const userId = request.user.id;
 
@@ -30,6 +33,8 @@ export class GetTransactionController {
       filters: {
         from: from ? new Date(from) : undefined,
         to: to ? new Date(to) : undefined,
+        categoryId,
+        typeId,
       },
       sort: {
         id: orderId,

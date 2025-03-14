@@ -51,13 +51,13 @@ export class Transaction {
     (transactionType) => transactionType.transactions
   )
   @JoinColumn({ name: "type_id", referencedColumnName: "id" })
-  type?: TransactionType;
+  type: TransactionType;
 
   @ManyToOne(() => User, (user) => user.transactions)
   @JoinColumn({ name: "user_id", referencedColumnName: "id" })
-  user?: TransactionType;
+  user?: User;
 
   @ManyToOne(() => Category, (category) => category.transactions)
   @JoinColumn({ name: "category_id", referencedColumnName: "id" })
-  category?: Category;
+  category: Category;
 }

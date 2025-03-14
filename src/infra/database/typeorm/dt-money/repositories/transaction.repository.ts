@@ -22,10 +22,11 @@ export class TransactionRepository implements TransactionRepositoryInterface {
     params: CreateTranscationParams
   ): Promise<Transaction> {
     try {
+      console.log(params);
       const transaction = await this.transactionRepository.save(params);
       return transaction;
     } catch (error) {
-      throw new DatabaseError("Falha ao criar transação");
+      throw new DatabaseError("Falha ao criar transação", error);
     }
   }
 
@@ -118,8 +119,8 @@ export class TransactionRepository implements TransactionRepositoryInterface {
       }
 
       if (filters?.typeId) {
-        query.andWhere("category.id = :category", {
-          categoryId: filters.typeId,
+        query.andWhere("type.id = :typeId", {
+          typeId: filters.typeId,
         });
       }
 

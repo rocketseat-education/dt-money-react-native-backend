@@ -20,6 +20,6 @@ export class CreateTransactionController {
       userId,
     });
 
-    reply.send(transaction);
+    reply.status(200).send(transaction);
   };
 }

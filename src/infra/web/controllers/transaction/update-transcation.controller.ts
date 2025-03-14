@@ -15,11 +15,11 @@ export class UpdateTransactionController {
   ) => {
     const body = request.body;
     const userId = request.user.id;
-    const transaction = await this.updateTransactionUseCase.execute({
+    await this.updateTransactionUseCase.execute({
       ...body,
       userId,
     });
 
-    reply.send(transaction);
+    reply.status(204).send();
   };
 }

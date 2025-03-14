@@ -15,11 +15,11 @@ export class DeleteTransactionController {
     const userId = request.user.id;
     const id = Number(request.params.id);
 
-    const transaction = await this.deleteTransactionUseCase.execute({
+    await this.deleteTransactionUseCase.execute({
       id,
       userId,
     });
 
-    reply.send(transaction);
+    reply.status(204).send();
   };
 }

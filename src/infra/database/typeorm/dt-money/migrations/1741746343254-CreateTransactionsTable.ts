@@ -22,23 +22,22 @@ export class CreateTransactionsTable1741746343254
           },
           {
             name: "type_id",
-            type: "int",
+            type: "integer",
             isNullable: false,
-            enum: ["1 - Entrada", "2 - Saída"],
           },
           {
             name: "category_id",
-            type: "int",
+            type: "integer",
             isNullable: false,
           },
           {
             name: "user_id",
-            type: "int",
+            type: "integer",
             isNullable: false,
           },
           {
             name: "value",
-            type: "int",
+            type: "integer",
             isNullable: false,
           },
           {

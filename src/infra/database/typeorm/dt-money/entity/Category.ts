@@ -11,18 +11,4 @@ export class Category {
 
   @OneToMany(() => Transaction, (transaction) => transaction.category)
   transactions: Transaction[];
-
-  @Column({
-    name: "created_at",
-    type: "datetime",
-    default: () => "CURRENT_TIMESTAMP",
-  })
-  createdAt: Date;
-
-  @Column({
-    name: "updated_at",
-    type: "datetime",
-    default: () => "CURRENT_TIMESTAMP",
-  })
-  updatedAt: Date;
 }
