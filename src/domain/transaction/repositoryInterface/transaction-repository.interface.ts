@@ -11,8 +11,8 @@ export interface GetTransactionsParams {
   filters: {
     from?: Date | undefined;
     to?: Date | undefined;
-    type?: number;
-    category?: number;
+    typeId?: number;
+    categoryId?: number;
   };
   sort?: {
     id?: OrderDirection;

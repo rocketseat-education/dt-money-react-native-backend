@@ -62,8 +62,10 @@ export class TransactionRepository implements TransactionRepositoryInterface {
       let perPage = 0;
       let transactions: Transaction[] = [];
 
-      const query =
-        this.transactionRepository.createQueryBuilder("transaction");
+      const query = this.transactionRepository
+        .createQueryBuilder("transaction")
+        .leftJoinAndSelect("transaction.type", "type")
+        .leftJoinAndSelect("transaction.category", "category");
 
       if (sort?.id) {
         query.addOrderBy(
@@ -94,6 +96,18 @@ export class TransactionRepository implements TransactionRepositoryInterface {
 
       if (filters?.to && !filters.from) {
         query.andWhere("transaction.createdAt >= :to", { to: filters.to });
+      }
+
+      if (filters?.categoryId) {
+        query.andWhere("category.id = :category", {
+          categoryId: filters.categoryId,
+        });
+      }
+
+      if (filters?.typeId) {
+        query.andWhere("category.id = :category", {
+          categoryId: filters.typeId,
+        });
       }
 
       if (pagination) {
