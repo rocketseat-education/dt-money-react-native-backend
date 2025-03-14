@@ -40,6 +40,12 @@ export class TransactionRepository implements TransactionRepositoryInterface {
 
       query.where("transaction.userId = :userId", { userId });
 
+      if (searchText) {
+        query.andWhere("transaction.value LIKE :searchText", {
+          searchText: `%${searchText}%`,
+        });
+      }
+
       if (filters?.from && !filters.to) {
         query.andWhere("transaction.createdAt >= :from", {
           from: filters.from,
