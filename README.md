@@ -1,4 +1,4 @@
-# dtmoney - Backend - RocketSeat
+# Dtmoney - Backend - RocketSeat
 
 Este é o backend do projeto **dtmoney**.
 
