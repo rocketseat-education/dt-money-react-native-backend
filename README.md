@@ -7,8 +7,7 @@ Este é o backend do projeto **dtmoney**.
 - **Node.js**
 - **TypeScript**
 - **TypeORM**
-- **PostgreSQL**
-- **Yarn**
+- **SQLite**
 
 ## 📦 Instalação e Execução
 
