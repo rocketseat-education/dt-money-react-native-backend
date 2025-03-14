@@ -1,27 +1,20 @@
-import { Transaction } from "../../../infra/database/typeorm/dt-money/entity/Transaction";
-import { OrderDirection } from "../../../interfaces/order-direction";
-import { Paginated } from "../../../interfaces/paginated";
+import { TransactionRepository } from "../../../infra/database/typeorm/dt-money/repositories/transaction.repository";
+import {
+  GetTransactionsParams,
+  TransactionRepositoryInterface,
+} from "../repositoryInterface/transaction-repository.interface";
 
-export interface GetTransactionsParams {
-  userId: number;
-  pagination?: {
-    page: number;
-    perPage: number;
-  };
-  filters: {
-    from?: Date | undefined;
-    to?: Date | undefined;
-    type?: number;
-    category?: number;
-  };
-  sort?: {
-    id?: OrderDirection;
-  };
-  searchText?: string;
-}
+export class GetTransactionsUseCase {
+  private transactionRepository: TransactionRepositoryInterface;
 
-export interface TransactionRepositoryInterface {
-  getTransactions(
-    params: GetTransactionsParams
-  ): Promise<Paginated<Transaction>>;
+  constructor() {
+    this.transactionRepository = new TransactionRepository();
+  }
+
+  async execute(params: GetTransactionsParams) {
+    const transactions = await this.transactionRepository.getTransactions(
+      params
+    );
+    return transactions;
+  }
 }

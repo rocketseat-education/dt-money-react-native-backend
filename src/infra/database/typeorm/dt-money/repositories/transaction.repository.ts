@@ -4,15 +4,48 @@ import { DtMoneyDataSource } from "../data-source";
 import {
   GetTransactionsParams,
   TransactionRepositoryInterface,
-} from "../../../../../domain/transaction/use-cases/get-transaction";
+  UpdateTransactionParams,
+} from "../../../../../domain/transaction/repositoryInterface/transaction-repository.interface";
 import { DatabaseError } from "../../../../../shared/errors/database.error";
 import { Paginated } from "../../../../../interfaces/paginated";
+import { NotFoundError } from "../../../../../shared/errors/not-found.error";
 
 export class TransactionRepository implements TransactionRepositoryInterface {
-  private userRepository: Repository<Transaction>;
+  private transactionRepository: Repository<Transaction>;
 
   constructor() {
-    this.userRepository = DtMoneyDataSource.getRepository(Transaction);
+    this.transactionRepository = DtMoneyDataSource.getRepository(Transaction);
+  }
+  async deleteTransaction(transactionId: number): Promise<void> {
+    try {
+      await this.transactionRepository.softDelete(transactionId);
+    } catch (error) {
+      throw new DatabaseError("Falha ao excluir a transação", error);
+    }
+  }
+
+  async findById(id: number): Promise<Transaction> {
+    try {
+      const transaction = await this.transactionRepository.findOne({
+        where: { id },
+      });
+
+      if (!transaction) {
+        throw new NotFoundError(`Transação com ID ${id} não encontrada`);
+      }
+
+      return transaction;
+    } catch (error) {
+      throw new DatabaseError("Falha ao buscar a transação por ID", error);
+    }
+  }
+
+  async updateTransaction(params: UpdateTransactionParams): Promise<void> {
+    try {
+      await this.transactionRepository.save(params);
+    } catch (error) {
+      throw new DatabaseError("Falha ao atualizar a transação", error);
+    }
   }
 
   async getTransactions({
@@ -29,7 +62,8 @@ export class TransactionRepository implements TransactionRepositoryInterface {
       let perPage = 0;
       let transactions: Transaction[] = [];
 
-      const query = this.userRepository.createQueryBuilder("transaction");
+      const query =
+        this.transactionRepository.createQueryBuilder("transaction");
 
       if (sort?.id) {
         query.addOrderBy(
