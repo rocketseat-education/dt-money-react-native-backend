@@ -2,6 +2,7 @@ import { Repository } from "typeorm";
 import { Transaction } from "../entity/Transaction";
 import { DtMoneyDataSource } from "../data-source";
 import {
+  CreateTranscationParams,
   GetTransactionsParams,
   TransactionRepositoryInterface,
   UpdateTransactionParams,
@@ -16,6 +17,18 @@ export class TransactionRepository implements TransactionRepositoryInterface {
   constructor() {
     this.transactionRepository = DtMoneyDataSource.getRepository(Transaction);
   }
+
+  async createTransaction(
+    params: CreateTranscationParams
+  ): Promise<Transaction> {
+    try {
+      const transaction = await this.transactionRepository.save(params);
+      return transaction;
+    } catch (error) {
+      throw new DatabaseError("Falha ao criar transação");
+    }
+  }
+
   async deleteTransaction(transactionId: number): Promise<void> {
     try {
       await this.transactionRepository.softDelete(transactionId);

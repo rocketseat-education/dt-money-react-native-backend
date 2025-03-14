@@ -22,9 +22,17 @@ export interface GetTransactionsParams {
 
 export interface UpdateTransactionParams {
   id: number;
+  userId: number;
   typeId?: number;
   categoryId?: number;
   value?: number;
+}
+
+export interface CreateTranscationParams {
+  typeId: number;
+  value: number;
+  categoryId: number;
+  userId: number;
 }
 
 export interface TransactionRepositoryInterface {
@@ -34,4 +42,5 @@ export interface TransactionRepositoryInterface {
   deleteTransaction(transactionId: number): Promise<void>;
   findById(id: number): Promise<Transaction>;
   updateTransaction(params: UpdateTransactionParams): Promise<void>;
+  createTransaction(params: CreateTranscationParams): Promise<Transaction>;
 }
