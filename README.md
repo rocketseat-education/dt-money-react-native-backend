@@ -22,7 +22,7 @@ cd dtmoney-backend
 
 ### 2️⃣ Instalar as dependências
 
-Utilize o gerenciador de pacotes **Yarn** ou **NPM** para instalar todas as dependências do projeto:
+Utilize o gerenciador de pacotes **yarn** ou **npm** para instalar todas as dependências do projeto:
 
 ```sh
 yarn install
