@@ -14,6 +14,8 @@ export class RegisterController {
     reply: FastifyReply
   ) => {
     const userData = request.body;
+    userData.email = userData.email.toLowerCase();
+
     const user = await this.authLogic.execute(userData);
 
     reply.send(user);

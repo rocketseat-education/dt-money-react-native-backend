@@ -35,6 +35,12 @@ export interface CreateTranscationParams {
   userId: number;
 }
 
+export interface TransactionTotalResponse {
+  revenue: number;
+  expense: number;
+  total: number;
+}
+
 export interface TransactionRepositoryInterface {
   getTransactions(
     params: GetTransactionsParams
@@ -43,4 +49,7 @@ export interface TransactionRepositoryInterface {
   findById(id: number): Promise<Transaction>;
   updateTransaction(params: UpdateTransactionParams): Promise<void>;
   createTransaction(params: CreateTranscationParams): Promise<Transaction>;
+  getTransactionTotals(
+    params: GetTransactionsParams
+  ): Promise<TransactionTotalResponse>;
 }

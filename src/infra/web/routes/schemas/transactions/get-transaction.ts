@@ -6,7 +6,8 @@ const successResponse = S.object()
   .prop("totalRows", S.number())
   .prop("totalPages", S.number())
   .prop("page", S.number())
-  .prop("perPage", S.number());
+  .prop("perPage", S.number())
+  .prop("totalTransactions", S.ref("#TotalTransactions"));
 
 const querystring = S.object()
   .prop("page", S.number().minimum(1))

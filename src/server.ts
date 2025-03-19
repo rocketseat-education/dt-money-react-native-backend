@@ -22,6 +22,10 @@ import * as ErrorHandler from "./infra/web/config/error-handler";
 
   Routes.register(app);
 
+  app.get("/", async (request, reply) => {
+    return { message: "API funcionando!" };
+  });
+
   app.listen(
     {
       port: 3001,

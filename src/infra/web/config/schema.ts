@@ -41,6 +41,12 @@ export const configure = (fastify: FastifyInstance) => {
     .prop("updatedAt", S.string())
     .prop("deletedAt", S.oneOf([S.string().format("date-time"), S.null()]));
 
+  const totalTransactions = S.object()
+    .id("TotalTransactions")
+    .prop("revenue", S.number())
+    .prop("expense", S.number())
+    .prop("total", S.number());
+
   const transaction = S.object()
     .id("Transaction")
     .prop("id", S.number().required())
@@ -86,6 +92,7 @@ export const configure = (fastify: FastifyInstance) => {
     .id("OrderDirection");
 
   fastify.addSchema(transaction);
+  fastify.addSchema(totalTransactions);
   fastify.addSchema(user);
   fastify.addSchema(orderDirection);
   fastify.addSchema(unprocessableEntityResponse);

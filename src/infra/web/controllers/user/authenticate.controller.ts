@@ -14,6 +14,8 @@ export class AuthenticateController {
     reply: FastifyReply
   ) => {
     const userData = request.body;
+    userData.email = userData.email.toLowerCase();
+
     const user = await this.authLogic.execute(userData);
 
     reply.send(user);

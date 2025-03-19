@@ -22,7 +22,9 @@ export class CheckAuthtenticationMiddleware {
       throw new Error("Não possui token");
     }
 
-    const { email } = jwt.verify(token, process.env.APP_SCRETET_KEY);
+    const { email } = jwt.verify(token, process.env.APP_SCRETET_KEY) as {
+      email: string;
+    };
 
     try {
       const user = await this.authRepository.findByEmail(email);

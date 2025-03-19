@@ -32,7 +32,7 @@ export class UserTypeormRepository implements UserRepositoryInterface {
       });
       return user;
     } catch (error) {
-      throw new DatabaseError("Falha ao buscar isiário!");
+      throw new DatabaseError("Falha ao buscar isiário!", error);
     }
   }
 }

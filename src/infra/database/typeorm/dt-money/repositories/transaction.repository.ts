@@ -5,6 +5,7 @@ import {
   CreateTranscationParams,
   GetTransactionsParams,
   TransactionRepositoryInterface,
+  TransactionTotalResponse,
   UpdateTransactionParams,
 } from "../../../../../domain/transaction/repositoryInterface/transaction-repository.interface";
 import { DatabaseError } from "../../../../../shared/errors/database.error";
@@ -59,6 +60,57 @@ export class TransactionRepository implements TransactionRepositoryInterface {
       await this.transactionRepository.save(params);
     } catch (error) {
       throw new DatabaseError("Falha ao atualizar a transação", error);
+    }
+  }
+
+  async getTransactionTotals({
+    userId,
+    filters,
+    searchText,
+  }: GetTransactionsParams): Promise<TransactionTotalResponse> {
+    try {
+      const query = this.transactionRepository
+        .createQueryBuilder("transaction")
+        .select([
+          "COALESCE(SUM(CASE WHEN transaction.typeId = 1 THEN transaction.value ELSE 0 END), 0) AS totalRevenue",
+          "COALESCE(SUM(CASE WHEN transaction.typeId = 2 THEN transaction.value ELSE 0 END), 0) AS totalExpense",
+          "COALESCE(SUM(CASE WHEN transaction.typeId = 1 THEN transaction.value ELSE -transaction.value END), 0) AS total",
+        ])
+        .where("transaction.userId = :userId", { userId });
+
+      if (filters?.from) {
+        query.andWhere("transaction.createdAt >= :from", {
+          from: filters.from,
+        });
+      }
+      if (filters?.to) {
+        query.andWhere("transaction.createdAt <= :to", { to: filters.to });
+      }
+      if (filters?.categoryId) {
+        query.andWhere("transaction.categoryId = :categoryId", {
+          categoryId: filters.categoryId,
+        });
+      }
+      if (filters?.typeId) {
+        query.andWhere("transaction.type = :typeId", {
+          typeId: filters.typeId,
+        });
+      }
+      if (searchText) {
+        query.andWhere("CAST(transaction.value AS TEXT) LIKE :searchText", {
+          searchText: `%${searchText}%`,
+        });
+      }
+
+      const result = await query.getRawOne();
+
+      return {
+        revenue: Number(result.revenue),
+        expense: Number(result.expense),
+        total: Number(result.total),
+      };
+    } catch (error) {
+      throw new DatabaseError("Falha ao calcular totais das transações", error);
     }
   }
 
