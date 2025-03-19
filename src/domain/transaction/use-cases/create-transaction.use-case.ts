@@ -1,4 +1,4 @@
-import { Transaction } from "../../../infra/database/typeorm/dt-money/entity/Transaction";
+import { Transaction } from "../../../infra/database/typeorm/dt-money/entities/Transaction";
 import { TransactionRepository } from "../../../infra/database/typeorm/dt-money/repositories/transaction.repository";
 import {
   CreateTranscationParams,

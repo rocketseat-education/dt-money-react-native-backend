@@ -1,5 +1,5 @@
 import { Repository } from "typeorm";
-import { Transaction } from "../entity/Transaction";
+import { Transaction } from "../entities/Transaction";
 import { DtMoneyDataSource } from "../data-source";
 import {
   CreateTranscationParams,

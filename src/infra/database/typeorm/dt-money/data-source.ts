@@ -7,7 +7,7 @@ export const DtMoneyDataSource = new DataSource({
   database: path.resolve(__dirname, "./database.sqlite"),
   synchronize: false,
   logging: false,
-  entities: [path.resolve(__dirname, "entity", "*{js,.ts}")],
-  migrations: [path.resolve(__dirname, "migrations", "*{js,.ts}")],
+  entities: [path.resolve(__dirname, "entities", "*.{ts,js}")],
+  migrations: [path.resolve(__dirname, "migrations", "*.{ts,js}")],
   subscribers: [],
 });

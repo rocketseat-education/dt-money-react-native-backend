@@ -7,8 +7,8 @@ export class TransactionType {
   id: number;
 
   @Column({ name: "name", type: "varchar", nullable: false })
-  name: number;
+  name: string;
 
   @OneToMany(() => Transaction, (transaction) => transaction.type)
-  transactions: Transaction[];
+  transactions?: Transaction[];
 }

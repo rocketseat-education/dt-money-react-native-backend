@@ -1,4 +1,4 @@
-import { User } from "../../../infra/database/typeorm/dt-money/entity/User";
+import { User } from "../../../infra/database/typeorm/dt-money/entities/User";
 
 export interface CreateUserParams {
   name: string;

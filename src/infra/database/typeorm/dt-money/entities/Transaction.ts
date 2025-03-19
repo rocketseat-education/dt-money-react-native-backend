@@ -8,9 +8,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { TransactionType } from "./Type";
-import { Category } from "./Category";
+import { TransactionType } from "./TransactionType";
 import { User } from "./User";
+import { TransactionCategory } from "./TransactionCategory";
 
 @Entity("transactions")
 export class Transaction {
@@ -57,7 +57,7 @@ export class Transaction {
   @JoinColumn({ name: "user_id", referencedColumnName: "id" })
   user?: User;
 
-  @ManyToOne(() => Category, (category) => category.transactions)
+  @ManyToOne(() => TransactionCategory, (category) => category.transactions)
   @JoinColumn({ name: "category_id", referencedColumnName: "id" })
-  category: Category;
+  category: TransactionCategory;
 }

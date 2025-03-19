@@ -2,7 +2,7 @@ import {
   TransactionRepositoryInterface,
   UpdateTransactionParams,
 } from "../repositoryInterface/transaction-repository.interface";
-import { Transaction } from "../../../infra/database/typeorm/dt-money/entity/Transaction";
+import { Transaction } from "../../../infra/database/typeorm/dt-money/entities/Transaction";
 import { TransactionRepository } from "../../../infra/database/typeorm/dt-money/repositories/transaction.repository";
 import { NotFoundError } from "../../../shared/errors/not-found.error";
 
