@@ -12,10 +12,10 @@ export class GetTransactionsUseCase {
   }
 
   async execute(params: GetTransactionsParams) {
-    const [transactions, total] = await Promise.all([
+    const [transactions, totalTransactions] = await Promise.all([
       this.transactionRepository.getTransactions(params),
       this.transactionRepository.getTransactionTotals(params),
     ]);
-    return { transactions, total };
+    return { ...transactions, totalTransactions };
   }
 }
