@@ -44,7 +44,7 @@ export class CreateTransactionsTable1741746343254
             name: "created_at",
             type: "datatime",
             isNullable: false,
-            default: "now()",
+            default: "CURRENT_TIMESTAMP",
           },
           {
             name: "updated_at",

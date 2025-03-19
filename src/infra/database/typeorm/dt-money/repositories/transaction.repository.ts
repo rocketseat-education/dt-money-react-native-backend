@@ -74,7 +74,7 @@ export class TransactionRepository implements TransactionRepositoryInterface {
         .select([
           "COALESCE(SUM(CASE WHEN transaction.typeId = 1 THEN transaction.value ELSE 0 END), 0) AS totalRevenue",
           "COALESCE(SUM(CASE WHEN transaction.typeId = 2 THEN transaction.value ELSE 0 END), 0) AS totalExpense",
-          "COALESCE(SUM(CASE WHEN transaction.typeId = 1 THEN transaction.value ELSE -transaction.value END), 0) AS total",
+          "COALESCE(SUM(CASE WHEN transaction.typeId = 1 THEN transaction.value ELSE -1 * transaction.value END), 0) AS total",
         ])
         .where("transaction.userId = :userId", { userId });
 
@@ -92,7 +92,7 @@ export class TransactionRepository implements TransactionRepositoryInterface {
         });
       }
       if (filters?.typeId) {
-        query.andWhere("transaction.type = :typeId", {
+        query.andWhere("transaction.typeId = :typeId", {
           typeId: filters.typeId,
         });
       }
@@ -105,8 +105,8 @@ export class TransactionRepository implements TransactionRepositoryInterface {
       const result = await query.getRawOne();
 
       return {
-        revenue: Number(result.revenue),
-        expense: Number(result.expense),
+        revenue: Number(result.totalRevenue),
+        expense: Number(result.totalExpense),
         total: Number(result.total),
       };
     } catch (error) {
