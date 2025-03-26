@@ -8,13 +8,32 @@ import { UpdateTransactionController } from "../controllers/transaction/update-t
 import { updateTransactionSchema } from "./schemas/transactions/update-transaction";
 import { GetTransactionController } from "../controllers/transaction/get-transcation.controller";
 import { getTransactionSchema } from "./schemas/transactions/get-transaction";
+import { getTransactionDataSchema } from "./schemas/transactions/get-transaction-data";
+import { GetTransactionData } from "../controllers/transaction/get-transaction-data.controller";
 
 export const configure = (fastify: FastifyInstance) => {
   const createTransaction = new CreateTransactionController();
   const deleteTransaction = new DeleteTransactionController();
   const updateTransaction = new UpdateTransactionController();
   const getTransaction = new GetTransactionController();
+  const getTransactionData = new GetTransactionData();
   const checkAuthenticated = new CheckAuthtenticationMiddleware();
+
+  fastify.route({
+    url: "/transaction/data",
+    method: "get",
+    handler: getTransactionData.execute,
+    preHandler: [checkAuthenticated.execute],
+    schema: getTransactionDataSchema,
+  });
+
+  fastify.route({
+    url: "/transaction",
+    method: "get",
+    handler: getTransaction.execute,
+    preHandler: [checkAuthenticated.execute],
+    schema: getTransactionSchema,
+  });
 
   fastify.route({
     url: "/transaction",
@@ -38,13 +57,5 @@ export const configure = (fastify: FastifyInstance) => {
     handler: updateTransaction.execute,
     preHandler: [checkAuthenticated.execute],
     schema: updateTransactionSchema,
-  });
-
-  fastify.route({
-    url: "/transaction",
-    method: "get",
-    handler: getTransaction.execute,
-    preHandler: [checkAuthenticated.execute],
-    schema: getTransactionSchema,
   });
 };

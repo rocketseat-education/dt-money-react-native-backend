@@ -42,14 +42,14 @@ export class GetTransactionController {
       userId,
       searchText: searchText ?? undefined,
     };
-
+    console.log({ page, perPage });
     if (page && perPage) {
       params.pagination = {
         page,
         perPage,
       };
     }
-
+    console.log(params);
     const transaction = await this.getTransactionUseCase.execute(params);
 
     reply.send(transaction);

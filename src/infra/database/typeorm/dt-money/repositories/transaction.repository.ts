@@ -23,7 +23,6 @@ export class TransactionRepository implements TransactionRepositoryInterface {
     params: CreateTranscationParams
   ): Promise<Transaction> {
     try {
-      console.log(params);
       const transaction = await this.transactionRepository.save(params);
       return transaction;
     } catch (error) {
@@ -74,7 +73,7 @@ export class TransactionRepository implements TransactionRepositoryInterface {
         .select([
           "COALESCE(SUM(CASE WHEN transaction.typeId = 1 THEN transaction.value ELSE 0 END), 0) AS totalRevenue",
           "COALESCE(SUM(CASE WHEN transaction.typeId = 2 THEN transaction.value ELSE 0 END), 0) AS totalExpense",
-          "COALESCE(SUM(CASE WHEN transaction.typeId = 1 THEN transaction.value ELSE -1 * transaction.value END), 0) AS total",
+          "COALESCE(SUM(CASE WHEN transaction.typeId = 1 THEN transaction.value ELSE 0 END), 0) - COALESCE(SUM(CASE WHEN transaction.typeId = 2 THEN transaction.value ELSE 0 END), 0) AS total",
         ])
         .where("transaction.userId = :userId", { userId });
 
@@ -83,19 +82,25 @@ export class TransactionRepository implements TransactionRepositoryInterface {
           from: filters.from,
         });
       }
+
       if (filters?.to) {
-        query.andWhere("transaction.createdAt <= :to", { to: filters.to });
+        query.andWhere("transaction.createdAt <= :to", {
+          to: filters.to,
+        });
       }
+
       if (filters?.categoryId) {
         query.andWhere("transaction.categoryId = :categoryId", {
           categoryId: filters.categoryId,
         });
       }
+
       if (filters?.typeId) {
         query.andWhere("transaction.typeId = :typeId", {
           typeId: filters.typeId,
         });
       }
+
       if (searchText) {
         query.andWhere("CAST(transaction.value AS TEXT) LIKE :searchText", {
           searchText: `%${searchText}%`,
@@ -138,6 +143,8 @@ export class TransactionRepository implements TransactionRepositoryInterface {
           "transaction.id",
           sort.id.toUpperCase() as "ASC" | "DESC"
         );
+      } else {
+        query.addOrderBy("transaction.id", "DESC");
       }
 
       query.where("transaction.userId = :userId", { userId });
@@ -192,7 +199,6 @@ export class TransactionRepository implements TransactionRepositoryInterface {
       } else {
         transactions = await query.getMany();
       }
-
       return {
         data: transactions,
         totalRows,

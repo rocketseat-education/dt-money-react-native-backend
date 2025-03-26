@@ -17,6 +17,9 @@ export class Transaction {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ name: "description", type: "varchar", nullable: true })
+  description?: number;
+
   @Column({ name: "type_id", type: "int", nullable: false })
   typeId: number;
 

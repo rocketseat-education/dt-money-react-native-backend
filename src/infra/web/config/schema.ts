@@ -41,6 +41,16 @@ export const configure = (fastify: FastifyInstance) => {
     .prop("updatedAt", S.string())
     .prop("deletedAt", S.oneOf([S.string().format("date-time"), S.null()]));
 
+  const type = S.object()
+    .id("Type")
+    .prop("id", S.number())
+    .prop("name", S.string());
+
+  const category = S.object()
+    .id("Category")
+    .prop("id", S.number())
+    .prop("name", S.string());
+
   const totalTransactions = S.object()
     .id("TotalTransactions")
     .prop("revenue", S.number())
@@ -51,6 +61,7 @@ export const configure = (fastify: FastifyInstance) => {
     .id("Transaction")
     .prop("id", S.number().required())
     .prop("value", S.number().required())
+    .prop("description", S.string().required())
     .prop("categoryId", S.number().required())
     .prop("typeId", S.number().required())
     .prop(
@@ -91,6 +102,8 @@ export const configure = (fastify: FastifyInstance) => {
     .enum(["ASC", "asc", "DESC", "desc"])
     .id("OrderDirection");
 
+  fastify.addSchema(type);
+  fastify.addSchema(category);
   fastify.addSchema(transaction);
   fastify.addSchema(totalTransactions);
   fastify.addSchema(user);
