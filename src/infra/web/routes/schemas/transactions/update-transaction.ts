@@ -5,7 +5,8 @@ const body = S.object()
   .prop("id", S.number().required())
   .prop("typeId", S.number())
   .prop("categoryId", S.number())
-  .prop("value", S.number());
+  .prop("value", S.number())
+  .prop("description", S.string());
 
 export const updateTransactionSchema: FastifySchema = {
   tags: ["Transaction"],

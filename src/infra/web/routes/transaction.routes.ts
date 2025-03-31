@@ -20,7 +20,7 @@ export const configure = (fastify: FastifyInstance) => {
   const checkAuthenticated = new CheckAuthtenticationMiddleware();
 
   fastify.route({
-    url: "/transaction/data",
+    url: "/transaction/categories",
     method: "get",
     handler: getTransactionData.execute,
     preHandler: [checkAuthenticated.execute],

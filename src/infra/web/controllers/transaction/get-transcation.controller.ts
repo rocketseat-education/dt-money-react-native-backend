@@ -11,7 +11,7 @@ interface Request {
     to?: string;
     orderId?: OrderDirection;
     searchText?: string;
-    categoryId?: number;
+    categoryIds?: number[];
     typeId?: number;
   };
 }
@@ -24,16 +24,22 @@ export class GetTransactionController {
   }
 
   execute = async (request: FastifyRequest<Request>, reply: FastifyReply) => {
-    const { from, orderId, page, perPage, to, searchText, categoryId, typeId } =
-      request.query;
-
+    const {
+      from,
+      orderId,
+      page,
+      perPage,
+      to,
+      searchText,
+      categoryIds,
+      typeId,
+    } = request.query;
     const userId = request.user.id;
-
     const params: GetTransactionsParams = {
       filters: {
         from: from ? new Date(from) : undefined,
         to: to ? new Date(to) : undefined,
-        categoryId,
+        categoryIds,
         typeId,
       },
       sort: {
@@ -42,14 +48,14 @@ export class GetTransactionController {
       userId,
       searchText: searchText ?? undefined,
     };
-    console.log({ page, perPage });
+
     if (page && perPage) {
       params.pagination = {
         page,
         perPage,
       };
     }
-    console.log(params);
+
     const transaction = await this.getTransactionUseCase.execute(params);
 
     reply.send(transaction);

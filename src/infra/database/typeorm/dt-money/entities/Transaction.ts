@@ -18,7 +18,7 @@ export class Transaction {
   id: number;
 
   @Column({ name: "description", type: "varchar", nullable: true })
-  description?: number;
+  description?: string;
 
   @Column({ name: "type_id", type: "int", nullable: false })
   typeId: number;

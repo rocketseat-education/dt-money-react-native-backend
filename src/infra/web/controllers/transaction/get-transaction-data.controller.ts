@@ -10,7 +10,6 @@ export class GetTransactionData {
 
   execute = async (req: FastifyRequest, reply: FastifyReply) => {
     const data = await this.useCase.execute();
-    console.log(data);
     return reply.send(data);
   };
 }

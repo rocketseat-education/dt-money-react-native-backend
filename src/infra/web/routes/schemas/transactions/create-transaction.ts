@@ -4,7 +4,8 @@ import S from "fluent-json-schema";
 const body = S.object()
   .prop("typeId", S.number().required())
   .prop("categoryId", S.number().required())
-  .prop("value", S.number().required());
+  .prop("value", S.number().required())
+  .prop("description", S.string());
 
 const successResponse = S.ref("Transaction#");
 

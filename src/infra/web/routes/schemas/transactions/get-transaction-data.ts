@@ -1,9 +1,7 @@
 import { FastifySchema } from "fastify";
 import S from "fluent-json-schema";
 
-const successResponse = S.object()
-  .prop("types", S.array().items(S.ref("Type#")))
-  .prop("categories", S.array().items(S.ref("Category#")));
+const successResponse = S.array().items(S.ref("Category#"));
 
 export const getTransactionDataSchema: FastifySchema = {
   tags: ["Transaction"],

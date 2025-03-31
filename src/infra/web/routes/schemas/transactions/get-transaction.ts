@@ -14,7 +14,7 @@ const querystring = S.object()
   .prop("perPage", S.number().minimum(1))
   .prop("searchText", S.string())
   .prop("typeId", S.number().minimum(1))
-  .prop("categoryId", S.number().minimum(1))
+  .prop("categoryIds", S.array().items(S.number().minimum(1)))
   .prop("from", S.string().format("date-time"))
   .prop("to", S.string().format("date-time"))
   .prop("orderId", S.ref("OrderDirection#"));

@@ -12,7 +12,7 @@ export interface GetTransactionsParams {
     from?: Date | undefined;
     to?: Date | undefined;
     typeId?: number;
-    categoryId?: number;
+    categoryIds?: number[];
   };
   sort?: {
     id?: OrderDirection;
@@ -26,6 +26,7 @@ export interface UpdateTransactionParams {
   typeId?: number;
   categoryId?: number;
   value?: number;
+  description?: string;
 }
 
 export interface CreateTranscationParams {

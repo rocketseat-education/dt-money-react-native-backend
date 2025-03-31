@@ -1,4 +1,4 @@
-import { Repository } from "typeorm";
+import { Brackets, Repository } from "typeorm";
 import { Transaction } from "../entities/Transaction";
 import { DtMoneyDataSource } from "../data-source";
 import {
@@ -70,13 +70,14 @@ export class TransactionRepository implements TransactionRepositoryInterface {
     try {
       const query = this.transactionRepository
         .createQueryBuilder("transaction")
+        .leftJoinAndSelect("transaction.type", "type")
+        .leftJoinAndSelect("transaction.category", "category")
         .select([
           "COALESCE(SUM(CASE WHEN transaction.typeId = 1 THEN transaction.value ELSE 0 END), 0) AS totalRevenue",
           "COALESCE(SUM(CASE WHEN transaction.typeId = 2 THEN transaction.value ELSE 0 END), 0) AS totalExpense",
           "COALESCE(SUM(CASE WHEN transaction.typeId = 1 THEN transaction.value ELSE 0 END), 0) - COALESCE(SUM(CASE WHEN transaction.typeId = 2 THEN transaction.value ELSE 0 END), 0) AS total",
         ])
         .where("transaction.userId = :userId", { userId });
-
       if (filters?.from) {
         query.andWhere("transaction.createdAt >= :from", {
           from: filters.from,
@@ -89,9 +90,9 @@ export class TransactionRepository implements TransactionRepositoryInterface {
         });
       }
 
-      if (filters?.categoryId) {
-        query.andWhere("transaction.categoryId = :categoryId", {
-          categoryId: filters.categoryId,
+      if (filters?.categoryIds?.length) {
+        query.andWhere("category.id IN (:...categoryIds)", {
+          categoryIds: filters.categoryIds,
         });
       }
 
@@ -102,9 +103,19 @@ export class TransactionRepository implements TransactionRepositoryInterface {
       }
 
       if (searchText) {
-        query.andWhere("CAST(transaction.value AS TEXT) LIKE :searchText", {
-          searchText: `%${searchText}%`,
-        });
+        query.andWhere(
+          new Brackets((qb) => {
+            qb.orWhere("transaction.value LIKE :searchText", {
+              searchText: `%${searchText}%`,
+            })
+              .orWhere("type.name LIKE :searchText", {
+                searchText: `%${searchText}%`,
+              })
+              .orWhere("category.name LIKE :searchText", {
+                searchText: `%${searchText}%`,
+              });
+          })
+        );
       }
 
       const result = await query.getRawOne();
@@ -150,20 +161,30 @@ export class TransactionRepository implements TransactionRepositoryInterface {
       query.where("transaction.userId = :userId", { userId });
 
       if (searchText) {
-        query.andWhere("transaction.value LIKE :searchText", {
-          searchText: `%${searchText}%`,
-        });
+        query.andWhere(
+          new Brackets((qb) => {
+            qb.orWhere("transaction.value LIKE :searchText", {
+              searchText: `%${searchText}%`,
+            })
+              .orWhere("type.name LIKE :searchText", {
+                searchText: `%${searchText}%`,
+              })
+              .orWhere("category.name LIKE :searchText", {
+                searchText: `%${searchText}%`,
+              });
+          })
+        );
       }
 
-      if (filters?.from && !filters.to) {
+      if (filters?.from) {
         query.andWhere("transaction.createdAt >= :from", {
           from: filters.from,
         });
       }
 
-      if (filters?.from && !filters.to) {
-        query.andWhere("transaction.createdAt >= :from", {
-          from: filters.from,
+      if (filters?.to) {
+        query.andWhere("transaction.createdAt <= :to", {
+          to: filters.to,
         });
       }
 
@@ -171,9 +192,9 @@ export class TransactionRepository implements TransactionRepositoryInterface {
         query.andWhere("transaction.createdAt >= :to", { to: filters.to });
       }
 
-      if (filters?.categoryId) {
-        query.andWhere("category.id = :category", {
-          categoryId: filters.categoryId,
+      if (filters?.categoryIds?.length) {
+        query.andWhere("category.id IN (:...categoryIds)", {
+          categoryIds: filters.categoryIds,
         });
       }
 
