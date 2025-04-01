@@ -51,3 +51,4 @@ npm run dev
 ```
 
 O backend estará rodando em `http://localhost:3001`.
+Para acessar a documentação `http://localhost:3001/docs`
