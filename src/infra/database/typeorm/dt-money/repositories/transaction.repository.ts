@@ -113,6 +113,9 @@ export class TransactionRepository implements TransactionRepositoryInterface {
               })
               .orWhere("category.name LIKE :searchText", {
                 searchText: `%${searchText}%`,
+              })
+              .orWhere("transaction.description LIKE :searchText", {
+                searchText: `%${searchText}%`,
               });
           })
         );
@@ -170,6 +173,9 @@ export class TransactionRepository implements TransactionRepositoryInterface {
                 searchText: `%${searchText}%`,
               })
               .orWhere("category.name LIKE :searchText", {
+                searchText: `%${searchText}%`,
+              })
+              .orWhere("transaction.description LIKE :searchText", {
                 searchText: `%${searchText}%`,
               });
           })
