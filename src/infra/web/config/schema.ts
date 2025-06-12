@@ -66,33 +66,11 @@ export const configure = (fastify: FastifyInstance) => {
     .prop("typeId", S.number().required())
     .prop(
       "type",
-      S.oneOf([
-        S.null(),
-        S.object()
-          .prop("id", S.number())
-          .prop("name", S.string())
-          .prop("createdAt", S.string())
-          .prop("updatedAt", S.string())
-          .prop(
-            "deletedAt",
-            S.oneOf([S.string().format("date-time"), S.null()])
-          ),
-      ])
+      S.oneOf([S.object().prop("id", S.number()).prop("name", S.string())])
     )
     .prop(
       "category",
-      S.oneOf([
-        S.null(),
-        S.object()
-          .prop("id", S.number())
-          .prop("name", S.string())
-          .prop("createdAt", S.string())
-          .prop("updatedAt", S.string())
-          .prop(
-            "deletedAt",
-            S.oneOf([S.string().format("date-time"), S.null()])
-          ),
-      ])
+      S.oneOf([S.object().prop("id", S.number()).prop("name", S.string())])
     )
     .prop("createdAt", S.string())
     .prop("updatedAt", S.string())
